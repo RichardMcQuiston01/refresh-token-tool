@@ -47,7 +47,13 @@ You sign in once in your browser. The app handles the Open Authorization (OAuth)
    go build -ldflags "-H=windowsgui -s -w" -o chrome-refresh-token.exe .
    ```
 
-   The `-H=windowsgui` flag hides the console window on Windows. Leave it out on other systems. The `-s -w` flags make the file smaller.
+   The `-H=windowsgui` flag hides the console window on Windows. The `-s -w` flags make the file smaller. The first build is slow because Fyne takes a while to compile.
+
+   On other systems, leave out `-H=windowsgui` and pick any output name:
+
+   ```
+   go build -ldflags "-s -w" -o chrome-refresh-token .
+   ```
 
 4. Optional: run the tests. They cover the core logic and need no window system.
 
@@ -57,7 +63,7 @@ You sign in once in your browser. The app handles the Open Authorization (OAuth)
 
 ### Usage
 
-1. Start `chrome-refresh-token.exe`.
+1. Start the app you built (`chrome-refresh-token.exe` on Windows).
 2. Optional: pick a `.env` file with **Browse…**, or type its path and press Enter. The app loads your extension ID, client ID, and client secret from it. The app remembers the path for next time.
 3. Fill in any empty fields. To set the client secret, click **Edit**.
 4. Click **Get Refresh Token**. Your browser opens a Google page. Approve the request.
@@ -105,6 +111,7 @@ If `.env` already exists, the app first copies it to `.env.bak` in the same fold
 - **"Google's response contained no refresh_token."** You probably approved this app before. Go to https://myaccount.google.com/permissions, remove access for the app, and try again.
 - **"timed out waiting for authorization in the browser"** You did not approve within 3 minutes. Click **Get Refresh Token** again.
 - **"Token received but saving failed."** The token is still in the app. Click **Copy** to save it by hand.
+- **The build fails and mentions `gcc` or `cgo`.** Fyne needs a C compiler. Install one (see Prerequisites) and make sure it is on your `PATH`. Then build again.
 - **"Git repository detected but no .gitignore exists."** The `.bak` backup is not ignored by Git. Add `.env.bak` to a `.gitignore` before you commit.
 
 [Back to Top](#table-of-contents)
